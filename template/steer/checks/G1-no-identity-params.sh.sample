@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# Sample check for G1: no agent tool accepts the acting user's identity as an argument.
+#
+# This is a starting point, not a finished check. It greps tool definitions for
+# parameter names that usually carry identity. Adapt TOOL_PATHS and the pattern
+# to how your project defines tools, then:
+#   1. rename to G1-no-identity-params.sh and chmod +x
+#   2. prove it: add a `customer_id` parameter to one tool, run it, confirm it fails
+#   3. record the proof in steer/GATES.md and set G1 to active
+
+set -euo pipefail
+
+# Where your agent tool definitions live. Space-separated paths or globs.
+TOOL_PATHS="${TOOL_PATHS:-src/tools}"
+
+# Parameter names that suggest the model is supplying identity.
+NAMES='user_?id|customer_?id|account_?id|owner_?id|tenant_?id|actor_?id|userId|customerId|accountId|ownerId|tenantId'
+
+# Flag only declarations, not uses. A scoped query like
+#   where id=%s and customer_id=%s ... session.user_id
+# is the correct pattern (G2) and must not fail this check.
+#  1. schema keys, typed params, TS/zod fields:   customer_id: str   "customerId": {...}
+#  2. untyped Python params:                      def get_order(order_id, customer_id)
+DECL="(^|[^.[:alnum:]_])[\"']?($NAMES)[\"']?[[:space:]]*:[^:]"
+PYDEF="^[[:space:]]*(async[[:space:]]+)?def[[:space:]]+[[:alnum:]_]+[[:space:]]*\([^)]*\b($NAMES)\b"
+
+# Lines where the identity value is taken from the session are fine:
+#   customerId: ctx.session.userId
+# Adjust to how your project names its session or auth object.
+FROM_SESSION="[:=][[:space:]]*(ctx|context|session|req\.(user|session)|request\.(user|session)|auth|currentUser|current_user)\b"
+
+found=0
+for p in $TOOL_PATHS; do
+  [ -e "$p" ] || { echo "G1: path not found: $p (set TOOL_PATHS)"; exit 1; }
+  hits="$(grep -rEn -e "$DECL" -e "$PYDEF" "$p" | grep -Ev -- "$FROM_SESSION" || true)"
+  if [ -n "$hits" ]; then
+    echo "$hits"
+    found=1
+  fi
+done
+
+if [ "$found" -ne 0 ]; then
+  echo
+  echo "G1 FAILED: tool definitions above take an identity parameter."
+  echo "Read the acting user from the session instead, and remove the parameter from the tool schema."
+  exit 1
+fi
+
+echo "G1 ok: no identity parameters in tool definitions."
