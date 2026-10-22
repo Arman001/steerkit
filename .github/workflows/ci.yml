@@ -1,0 +1,40 @@
+# Tests the kit itself on every pull request and every push to main.
+# (examples/ci/github-actions.yml is the workflow for projects that use steerkit.)
+
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: test (${{ matrix.label }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: linux, python 3.12
+            os: ubuntu-latest
+            python: "3.12"
+          - label: linux, python 3.8
+            os: ubuntu-22.04
+            python: "3.8"
+          - label: macos
+            os: macos-latest
+            python: "3.12"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Self-tests
+        run: ./tests/run.sh
+      - name: Shell scripts parse
+        run: bash -n install.sh tests/run.sh template/steer/checks/G1-no-identity-params.sh.sample
