@@ -65,6 +65,16 @@ while IFS= read -r -d '' f; do
 done < <(find "$SRC/steer" -type f -print0 | sort -z)
 chmod +x "$TARGET/steer/bin/steer_check.py"
 
+# Record which steerkit this project runs, so rules and stats can be traced to a version.
+# Rewritten on every install and --update.
+KIT_VERSION="$(cat "$KIT_DIR/VERSION" 2>/dev/null || echo unknown)"
+KIT_COMMIT="$(git -C "$KIT_DIR" rev-parse --short HEAD 2>/dev/null || echo unknown)"
+if [ "$KIT_COMMIT" != unknown ] && [ -n "$(git -C "$KIT_DIR" status --porcelain 2>/dev/null)" ]; then
+  KIT_COMMIT="$KIT_COMMIT+dirty"
+fi
+printf 'version: %s\ncommit: %s\ninstalled: %s\n' "$KIT_VERSION" "$KIT_COMMIT" "$(date +%Y-%m-%d)" > "$TARGET/steer/VERSION"
+echo "  write   steer/VERSION (steerkit $KIT_VERSION, $KIT_COMMIT)"
+
 # 2. Claude Code skills
 while IFS= read -r -d '' f; do
   rel="${f#$SRC/}"

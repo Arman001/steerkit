@@ -388,6 +388,19 @@ def cmd_summary(root):
     return 0
 
 
+def kit_version(root):
+    """steerkit version and commit from steer/VERSION, written by the installer."""
+    path = root / "steer" / "VERSION"
+    if not path.exists():
+        return "unknown"
+    info = {}
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if ":" in line:
+            k, v = line.split(":", 1)
+            info[k.strip()] = v.strip()
+    return "{} ({})".format(info.get("version", "unknown"), info.get("commit", "unknown"))
+
+
 def days(a, b):
     return (b - a).days if a and b else None
 
@@ -445,6 +458,7 @@ def cmd_stats(root, as_json=False):
 
     data = {
         "date": today.isoformat(),
+        "steerkit": kit_version(root),
         "items": len(rows),
         "planned": len(planned),
         "findings": len(findings),
@@ -465,7 +479,7 @@ def cmd_stats(root, as_json=False):
         print(json.dumps(data, indent=2))
         return 0
 
-    print("steer stats, {}".format(data["date"]))
+    print("steer stats, {}, steerkit {}".format(data["date"], data["steerkit"]))
     print()
     print("Items: {} total, {} planned (spec), {} findings".format(len(rows), len(planned), len(findings)))
     if by_source:

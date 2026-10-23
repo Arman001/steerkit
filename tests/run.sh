@@ -68,6 +68,9 @@ mkdir -p "$P/.claude" && mv "$P/.claude-settings-seed.json" "$P/.claude/settings
 expect 0 "install into a new project" "$KIT/install.sh" "$P"
 expect 0 "lint passes on a fresh install" check lint
 [ -x "$P/steer/bin/steer_check.py" ] && ok "checker is executable" || bad "checker is executable"
+grep -qx "version: $(cat "$KIT/VERSION")" "$P/steer/VERSION" && grep -q "^commit: " "$P/steer/VERSION" && grep -q "^installed: " "$P/steer/VERSION" \
+  && ok "steer/VERSION records version, commit and install date" || bad "steer/VERSION"
+expect_out "steerkit $(cat "$KIT/VERSION") (" "stats reports the steerkit version" check stats
 grep -q "# My notes" "$P/CLAUDE.md" && ok "CLAUDE.md keeps existing content" || bad "CLAUDE.md keeps existing content"
 grep -q "@steer/STEER.md" "$P/CLAUDE.md" && ok "CLAUDE.md imports STEER.md" || bad "CLAUDE.md imports STEER.md"
 python3 -c "import json,sys; d=json.load(open(sys.argv[1])); assert d['permissions']['allow']==['Bash(ls)']; assert 'steer_check.py' in json.dumps(d['hooks']['Stop'])" "$P/.claude/settings.json" \
