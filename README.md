@@ -49,7 +49,7 @@ The loop: rules prevent most issues, attacks and audits catch what the rules mis
 ## Install
 
 ```bash
-git clone https://github.com/<your-github>/steerkit
+git clone https://github.com/Arman001/steerkit
 ./steerkit/install.sh /path/to/your/project
 ```
 
@@ -116,6 +116,10 @@ It doesn't make AI-written code safe. It makes the questions that usually get sk
 It won't remove the need for someone who can think like an attacker. The misuse catalog is a starting point, not a complete threat model. And splitting work into small, contained changes helps, but problems still collect where components meet.
 
 Rules have a cost. Every gate is one more thing the code has to satisfy, and Nabarun Mondal pointed out in the thread that adding rules can become its own problem. That is why steerkit keeps gates few and only counts them once their check is proven, and why Accept and Test are only required for P0 and P1 items. If a rule isn't catching anything, retire it.
+
+## Contributing
+
+Misuse cases from real products, gate checks for specific stacks, and bug fixes are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md). Run `./tests/run.sh` before opening a pull request.
 
 ## Credits
 
