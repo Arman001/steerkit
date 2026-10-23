@@ -49,11 +49,13 @@ The loop: rules prevent most issues, attacks and audits catch what the rules mis
 ## Install
 
 ```bash
-git clone https://github.com/Arman001/steerkit
+git clone --branch v0.1.0 https://github.com/Arman001/steerkit
 ./steerkit/install.sh /path/to/your/project
 ```
 
-The installer copies `steer/` and the skills, merges a Stop hook into `.claude/settings.json`, and adds `@steer/STEER.md` to your `CLAUDE.md`. It never overwrites your own files. Run it again with `--update` to refresh the tooling, and with `--agents-md` to point `AGENTS.md` at the rules for other agents.
+Drop `--branch v0.1.0` to get the latest `main`.
+
+The installer copies `steer/` and the skills, merges a Stop hook into `.claude/settings.json`, and adds `@steer/STEER.md` to your `CLAUDE.md`. It never overwrites your own files. It also writes `steer/VERSION`, recording which steerkit version and commit the project runs, and `stats` reports it. Run it again with `--update` to refresh the tooling, and with `--agents-md` to point `AGENTS.md` at the rules for other agents.
 
 Then open the project in Claude Code:
 
