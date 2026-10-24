@@ -14,6 +14,21 @@ I built a product with Claude writing most of the code. The core functionality w
 
 I posted about it on LinkedIn. More than 50 engineers replied with how they handle this: architects, CTOs, principal engineers, people running agents in production. steerkit is what those comments add up to. Credits are at the bottom.
 
+## Who it's for
+
+> **Note:** this section is based on reasoning about where the kit should help, not on results. steerkit has not yet been tested across many real app builds. Treat it as a hypothesis, and if your experience differs, open an issue.
+
+Any product where people log in, own data, pay, upload files, or talk to an AI agent that can call tools. The order-lookup story above is one example. The same questions apply to notes apps, document chatbots, SaaS with teams, file processors, and internal tools: who owns this, who can see it, what can the agent touch, and how would someone misuse it.
+
+It should help most where a missed access rule is expensive. Products without an AI agent still get everything except the agent tools section. For scripts, static sites or throwaway prototypes with no users, the process is likely to be mostly overhead.
+
+**What it is designed to do well**
+
+- Force access rules and misuse cases into the spec before code exists
+- Give every session the same memory through the tracker, so you stop re-explaining the codebase
+- Refuse "done" without evidence: a commit, an acceptance criterion, and a test seen failing first
+- Stay light: plain files, no dependencies, any stack, removable in a minute
+
 ## What's in it
 
 ```
@@ -118,6 +133,14 @@ It doesn't make AI-written code safe. It makes the questions that usually get sk
 It won't remove the need for someone who can think like an attacker. The misuse catalog is a starting point, not a complete threat model. And splitting work into small, contained changes helps, but problems still collect where components meet.
 
 Rules have a cost. Every gate is one more thing the code has to satisfy, and Nabarun Mondal pointed out in the thread that adding rules can become its own problem. That is why steerkit keeps gates few and only counts them once their check is proven, and why Accept and Test are only required for P0 and P1 items. If a rule isn't catching anything, retire it.
+
+It only checks the shape of the evidence. It can tell that a test exists and failed before the fix, not whether the test is any good.
+
+It depends on a person reviewing the access rules. A wrong spec gets built faithfully.
+
+It covers security, access and evidence. It does nothing for UX, performance, architecture, or whether the product is worth building.
+
+It is new. v0.1.0 has not yet been used to build a product end to end. That is happening now, and the results will shape the next version.
 
 ## Contributing
 
