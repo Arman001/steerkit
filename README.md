@@ -93,6 +93,8 @@ These are in `steer/STEER.md` and start as candidate gates in `steer/GATES.md`.
 
 A gate is only active when it has a named check, and that check has been shown to fail on an injected defect. A check that has never failed tells you nothing.
 
+A check also gets an attack pass before it is promoted: `/steer-promote` requires a `/steer-attack` run on the check (fresh session, ideally a different model) and every P1 finding fixed first. On the first real project, a secrets check with tests written first and seen failing still let 16 of 20 evasions through until an attack pass found them.
+
 The starter gates ship as `candidate`, not `active`. That is on purpose. You make them active for your project by writing the check (there's a sample for G1 in `steer/checks/`), proving it, and recording the proof. `steer_check.py lint` rejects an active gate without both.
 
 ## Tracker rules
