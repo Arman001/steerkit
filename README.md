@@ -39,6 +39,7 @@ steer/
   GATES.md          rules that block merge and release, each with a named and proven check
   TARGETS.md        standards to work toward, not blocking
   TRACKER.md        every item and finding, with status and evidence
+  VERSION           steerkit version and commit this project was installed from (written by the installer)
   checks/           one executable per mechanical gate
   bin/steer_check.py  lint, run checks, release gate, Stop hook (Python 3.8+, no dependencies)
 
