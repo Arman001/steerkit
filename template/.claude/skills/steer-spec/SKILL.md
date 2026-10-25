@@ -8,7 +8,7 @@ You are writing the spec that makes the unasked questions explicit. Input: $ARGU
 
 ## Steps
 
-1. Read `steer/STEER.md`, `steer/SPEC.md`, `steer/MISUSE.md`, `steer/GATES.md` and `steer/TRACKER.md`. If SPEC.md already has content, extend it. Never overwrite approved sections.
+1. Read `steer/STEER.md`, `steer/SPEC.md`, `steer/MISUSE.md`, and `steer/GATES.md`. Run `python3 steer/bin/steer_check.py summary` and read only the tracker rows for features you are extending, plus the highest existing ID so new rows get the next free one. If SPEC.md already has content, extend it. Never overwrite approved sections.
 
 2. If the input is thin, ask the human up to five short questions that change the design: who the users are, what data is private, what the agent can do on its own, what side effects exist, and whether there are multiple tenants or roles. Do not ask about things you can sensibly default; state the default instead.
 

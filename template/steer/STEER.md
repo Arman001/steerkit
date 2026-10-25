@@ -15,7 +15,7 @@ The short version: build what was asked, and also what wasn't. Every feature tha
 | `steer/TRACKER.md` | Every piece of work and every finding, with status and evidence | Agent, following the status rules |
 | `steer/checks/` | One executable per mechanical gate check | Agent writes, human approves |
 
-Read `steer/TRACKER.md` at the start of a session before doing anything else. It is the memory between sessions. Do not re-derive state that is already written there.
+At the start of a session, run `python3 steer/bin/steer_check.py summary` and read only the tracker rows you will work on. The tracker is the memory between sessions. Do not re-derive state that is already written there.
 
 ## Hard rules
 
