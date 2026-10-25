@@ -14,9 +14,20 @@ I built a product with Claude writing most of the code. The core functionality w
 
 I posted about it on LinkedIn. Dozens of engineers replied in the comments with how they handle this: architects, CTOs, principal engineers, people running agents in production. steerkit is what those comments add up to. Credits are at the bottom.
 
+## Early results
+
+From the first few days of building one product, a daily "AI or Real?" image game, with steerkit:
+
+- Before any code, the spec stage found 3 design flaws in the product doc: players could delete a play and count twice, answers were readable in the network tab, and the credits page would have published every answer, including future days.
+- The database rules had 19 passing tests. An attack pass showed that rules letting anyone write still passed all 19.
+- A secrets check with tests written first and seen failing still let 16 of 20 evasions through. After two attack rounds it runs on every commit and in CI, and blocked a planted key even with the local hook bypassed.
+- The cost: more steps per item, a tracker the agent's own edit script corrupted once, and a slower path to a playable site.
+
+One product, a few days. These are early signals, not proof.
+
 ## Who it's for
 
-> **Note:** this section is based on reasoning about where the kit should help, not on results. steerkit has not yet been tested across many real app builds. Treat it as a hypothesis, and if your experience differs, open an issue.
+> **Note:** this section is based on early use on one product and reasoning about where the kit should help. steerkit has not yet been tested across many real app builds. Treat it as a hypothesis, and if your experience differs, open an issue.
 
 Any product where people log in, own data, pay, upload files, or talk to an AI agent that can call tools. The order-lookup story above is one example. The same questions apply to notes apps, document chatbots, SaaS with teams, file processors, and internal tools: who owns this, who can see it, what can the agent touch, and how would someone misuse it.
 
@@ -143,11 +154,13 @@ It depends on a person reviewing the access rules. A wrong spec gets built faith
 
 It covers security, access and evidence. It does nothing for UX, performance, architecture, or whether the product is worth building.
 
-It is new. v0.1.0 has not yet been used to build a product end to end. That is happening now, and the results will shape the next version.
+It is new. v0.1.0 is being used on its first product now. The early results above shape the next version.
 
 ## Contributing
 
 Misuse cases from real products, gate checks for specific stacks, and bug fixes are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md). Run `./tests/run.sh` before opening a pull request.
+
+Known gaps found by real use are open as issues, labelled "found by real use".
 
 ## Credits
 
