@@ -12,7 +12,7 @@ It works with Claude Code out of the box. The rules and tracker are plain markdo
 
 I built a product with Claude writing most of the code. The core functionality worked. But before I caught it, a user could type fake policies into the chat and the agent would follow them, and it could share details of any order, not just the user's own. Nothing was broken. Everything worked. That was the problem.
 
-I posted about it on LinkedIn. More than 50 engineers replied with how they handle this: architects, CTOs, principal engineers, people running agents in production. steerkit is what those comments add up to. Credits are at the bottom.
+I posted about it on LinkedIn. Dozens of engineers replied in the comments with how they handle this: architects, CTOs, principal engineers, people running agents in production. steerkit is what those comments add up to. Credits are at the bottom.
 
 ## Who it's for
 
