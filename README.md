@@ -12,7 +12,7 @@ It works with Claude Code out of the box. The rules and tracker are plain markdo
 
 I built a product with Claude writing most of the code. The core functionality worked. But before I caught it, a user could type fake policies into the chat and the agent would follow them, and it could share details of any order, not just the user's own. Nothing was broken. Everything worked. That was the problem.
 
-I posted about it on LinkedIn. More than 50 engineers replied with how they handle this: architects, CTOs, principal engineers, people running agents in production. steerkit is what those comments add up to. Credits are at the bottom.
+I posted about it on LinkedIn. Dozens of engineers replied in the comments with how they handle this: architects, CTOs, principal engineers, people running agents in production. steerkit is what those comments add up to. Credits are at the bottom.
 
 ## Who it's for
 
@@ -39,6 +39,7 @@ steer/
   GATES.md          rules that block merge and release, each with a named and proven check
   TARGETS.md        standards to work toward, not blocking
   TRACKER.md        every item and finding, with status and evidence
+  VERSION           steerkit version and commit this project was installed from (written by the installer)
   checks/           one executable per mechanical gate
   bin/steer_check.py  lint, run checks, release gate, Stop hook (Python 3.8+, no dependencies)
 
@@ -92,6 +93,8 @@ These are in `steer/STEER.md` and start as candidate gates in `steer/GATES.md`.
 ## Gates must be proven
 
 A gate is only active when it has a named check, and that check has been shown to fail on an injected defect. A check that has never failed tells you nothing.
+
+A check also gets an attack pass before it is promoted: `/steer-promote` requires a `/steer-attack` run on the check (fresh session, ideally a different model) and every P1 finding fixed first. On the first real project, a secrets check with tests written first and seen failing still let 16 of 20 evasions through until an attack pass found them.
 
 The starter gates ship as `candidate`, not `active`. That is on purpose. You make them active for your project by writing the check (there's a sample for G1 in `steer/checks/`), proving it, and recording the proof. `steer_check.py lint` rejects an active gate without both.
 

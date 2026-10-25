@@ -10,7 +10,7 @@ This is a sweep, not a fix session. Do not change application code. Only write t
 
 ## 1. Map
 
-Read SPEC.md, GATES.md, TARGETS.md and the tracker. Then map the real system: entry points (routes, agent tools, jobs, webhooks), data stores, external services, and where identity and policy come from. Note anything in the code that the spec does not mention. Undocumented paths are where gaps hide.
+Read SPEC.md, GATES.md, and TARGETS.md. Run `python3 steer/bin/steer_check.py summary` and read only the tracker rows for the areas you audit, so you do not log a finding twice. Then map the real system: entry points (routes, agent tools, jobs, webhooks), data stores, external services, and where identity and policy come from. Note anything in the code that the spec does not mention. Undocumented paths are where gaps hide.
 
 ## 2. Audit in phases
 

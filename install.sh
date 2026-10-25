@@ -68,12 +68,16 @@ chmod +x "$TARGET/steer/bin/steer_check.py"
 # Record which steerkit this project runs, so rules and stats can be traced to a version.
 # Rewritten on every install and --update.
 KIT_VERSION="$(cat "$KIT_DIR/VERSION" 2>/dev/null || echo unknown)"
-KIT_COMMIT="$(git -C "$KIT_DIR" rev-parse --short HEAD 2>/dev/null || echo unknown)"
-if [ "$KIT_COMMIT" != unknown ] && [ -n "$(git -C "$KIT_DIR" status --porcelain 2>/dev/null)" ]; then
+KIT_COMMIT="$(git -C "$KIT_DIR" rev-parse --short HEAD 2>/dev/null || true)"
+if [ -n "$KIT_COMMIT" ] && [ -n "$(git -C "$KIT_DIR" status --porcelain 2>/dev/null)" ]; then
   KIT_COMMIT="$KIT_COMMIT+dirty"
 fi
-printf 'version: %s\ncommit: %s\ninstalled: %s\n' "$KIT_VERSION" "$KIT_COMMIT" "$(date +%Y-%m-%d)" > "$TARGET/steer/VERSION"
-echo "  write   steer/VERSION (steerkit $KIT_VERSION, $KIT_COMMIT)"
+{
+  printf 'version: %s\n' "$KIT_VERSION"
+  [ -n "$KIT_COMMIT" ] && printf 'commit: %s\n' "$KIT_COMMIT"
+  printf 'installed: %s\n' "$(date +%Y-%m-%d)"
+} > "$TARGET/steer/VERSION"
+echo "  write   steer/VERSION (steerkit $KIT_VERSION${KIT_COMMIT:+, $KIT_COMMIT})"
 
 # 2. Claude Code skills
 while IFS= read -r -d '' f; do

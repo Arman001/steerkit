@@ -20,12 +20,18 @@ Findings become rules only when something enforces them. No named check, no gate
 - **mechanical** if a script can detect violations, even roughly. Prefer this.
 - **review** only if no script can. Then the enforcement is the per-gate verdict table from `/steer-attack`, approved by the human.
 
-## 3. Write the check (mechanical)
+## 3. Attack the check first
+
+Before writing or promoting a check, run `/steer-attack` on that check, in a fresh session and ideally with a different model. Fix every P1 finding before going on.
+
+Why: on the first real project, a secrets check whose tests were written first and seen failing still let 16 of 20 evasions through until an attack pass found them.
+
+## 4. Write the check (mechanical)
 
 - Create `steer/checks/<GATE-ID>-<short-name>.<ext>`, executable, run from the project root, exit non-zero on violation, print file and line of each violation. Follow `steer/checks/README.md`.
 - Run it on the current code. Fix real violations it finds, or log them as P0 tracker rows with Found by `gate` if they need more work.
 
-## 4. Prove it
+## 5. Prove it
 
 This step is not optional.
 
@@ -36,7 +42,7 @@ This step is not optional.
 
 If the check does not fail on the injected defect, it does not count. Improve it or fall back to review enforcement.
 
-## 5. Record
+## 6. Record
 
 With the human's approval:
 - In `steer/GATES.md`: fill Check (file name, or `steer-attack verdict` for review), Proof (one line on what was injected and that it failed), set Status to `active`, and add a changelog row with the date and the finding that led to it.
